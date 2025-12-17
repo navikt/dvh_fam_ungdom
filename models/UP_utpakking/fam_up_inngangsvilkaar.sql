@@ -41,14 +41,13 @@ pre_final as (
 final as (
     select
         up_behandlingsperiode.pk_up_behandlingsperiode as FK_UP_BEHANDLINGSPERIODE,
-        VILKAAR,
-        UTFALL
+        pre_final.VILKAAR as VILKAAR,
+        pre_final.UTFALL  as UTFALL
     from pre_final
     join up_fagsak
       on pre_final.behandling_uuid  = up_fagsak.behandling_uuid
     join up_behandlingsperiode
         on up_behandlingsperiode.fk_up_fagsak = up_fagsak.pk_up_fagsak
-
 )
 
 select
