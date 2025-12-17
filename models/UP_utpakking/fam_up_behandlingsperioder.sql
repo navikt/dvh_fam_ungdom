@@ -5,20 +5,19 @@
 }}
 
 with up_meta_data as (
-    select * from {{ref ('up_meldinger_til_aa_pakke_ut')}} 
+    select * from {{ ref('up_meldinger_til_aa_pakke_ut') }} 
 ),
 
 up_fagsak as (
-    select * from {{ref ('fam_up_fagsak')}}
+    select * from {{ ref('fam_up_fagsak') }}
 ),
-
 
 pre_final as (
     select *
     from up_meta_data
         ,json_table(melding, '$'
             columns (
-                -- legg til annet jeg trenger? f.eks saksnummer?
+                behandling_uuid       varchar2 path '$.behandlingUuid', -- for join
                 nested path '$.behandlingsperioder[*]'
                 columns (
                     FOM             varchar2 path '$.fom',
@@ -30,18 +29,15 @@ pre_final as (
     where FOM is not null
 ),
 
-
 final as (
     select
-        to_date(periode_fom,'yyyy-mm-dd') as FOM,
-        to_date(periode_tom,'yyyy-mm-dd') as TOM,
+        to_date(FOM,'yyyy-mm-dd') as FOM,
+        to_date(TOM,'yyyy-mm-dd') as TOM,
         UTFALL,
         up_fagsak.pk_up_fagsak as FK_UP_FAGSAK
     from pre_final
     join up_fagsak
-      on pre_final.kafka_offset     = up_fagsak.kafka_offset
-     and pre_final.saksnummer       = up_fagsak.saksnummer
-     --and pre_final.behandling_uuid  = up_fagsak.behandling_uuid
+      on pre_final.behandling_uuid  = up_fagsak.behandling_uuid
 )
 
 select
@@ -50,6 +46,5 @@ select
     ,FOM
     ,TOM
     ,UTFALL
-    ,LASTET_DATO
+    ,localtimestamp as LASTET_DATO
 from final
-

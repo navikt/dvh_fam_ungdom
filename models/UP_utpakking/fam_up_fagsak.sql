@@ -5,7 +5,7 @@
 }}
 
 with up_meta_data as (
-    select * from {{ref ('up_meldinger_til_aa_pakke_ut') }}
+    select * from {{ ref('up_meldinger_til_aa_pakke_ut') }}
 ),
 
 pre_final as (
@@ -25,7 +25,6 @@ pre_final as (
         )
     ) j
 ),
---select * from pre_final
 
 final as (
     select
@@ -51,9 +50,8 @@ final as (
         p.KAFKA_PARTITION
     from pre_final p
     left join dt_person.ident_aktor_til_fk_person1_ikke_skjermet ident
-      on p.SOKER_AKTOR_ID = ident.off_id
+      on p.SOKER_AKTOR_ID = ident.aktor_id
      and p.KAFKA_MOTTATT_DATO between ident.gyldig_fra_dato and ident.gyldig_til_dato
-     and ident.skjermet_kode = 0
 )
 
 select
@@ -69,8 +67,6 @@ select
     UTBETALINGSREFERANSE,
     PROGRAMDELTAKELSE_FOM,
     PROGRAMDELTAKELSE_TOM,
-    KAFKA_TOPIC,
     KAFKA_OFFSET,
-    KAFKA_PARTITION,
     localtimestamp as LASTET_DATO
 from final

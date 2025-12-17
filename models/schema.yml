@@ -50,12 +50,16 @@ sources:
     schema: dvh_fam_ungdom
     tables:
       - name: fam_up_meta_data
-        description: 'inneholder meta_data for '
-      - name: fam_up_fagsak
         description: ''
       - name: fam_up_fagsak
         description: ''
-      - name: fam_up_fagsak
+      - name: fam_up_behandlingsperioder
         description: ''
-      - name: fam_up_fagsak
+      - name: fam_up_inngangsvilkaar
+        description: ''
+      - name: fam_up_tilkjent_ytelseperioder
+        description: ''
+      - name: fam_up_satsperioder
+        description: ''
+      - name: fam_up_inntektperioder
         description: ''
