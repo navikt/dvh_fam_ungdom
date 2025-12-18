@@ -13,28 +13,32 @@ up_fagsak as (
 ),
 
 up_behandlingsperiode as (
-    select * 
-    from {{ ref('fam_up_behandlingsperioder') }}
+    select * from {{ ref('fam_up_behandlingsperioder') }}
 ),
 
 pre_final as (
-    select *
+    select
+        j.behandling_uuid,
+        to_date(j.FOM, 'YYYY-MM-DD') as FOM_DATO,
+        to_date(j.TOM, 'YYYY-MM-DD') as TOM_DATO,
+        j.VILKAAR,
+        j.UTFALL
     from up_meta_data
-        ,json_table(melding, '$'
+    , json_table(melding, '$'
+        columns (
+            behandling_uuid         varchar2 path '$.behandlingUuid',
+            nested path '$.behandlingsperioder[*]'
             columns (
-                behandling_uuid          varchar2 path '$.behandlingUuid', -- for join
-                nested path '$.behandlingsperioder[*]'
+                FOM                 varchar2 path '$.fom',
+                TOM                 varchar2 path '$.tom',
+                nested path '$.inngangsvilkår[*]'
                 columns (
-                    FOM             varchar2 path '$.fom',
-                    TOM             varchar2 path '$.tom',
-                    nested path '$.inngangsvilkår[*]'
-                    columns (
-                        VILKAAR     varchar2 path '$.vilkår',
-                        UTFALL      varchar2 path '$.utfall'
-                    )
+                    VILKAAR         varchar2 path '$.vilkår',
+                    UTFALL          varchar2 path '$.utfall'
                 )
             )
-        ) j
+        )
+    ) j
     where VILKAAR is not null
 ),
 
@@ -47,7 +51,9 @@ final as (
     join up_fagsak
       on pre_final.behandling_uuid  = up_fagsak.behandling_uuid
     join up_behandlingsperiode
-        on up_behandlingsperiode.fk_up_fagsak = up_fagsak.pk_up_fagsak
+      on up_behandlingsperiode.fk_up_fagsak = up_fagsak.pk_up_fagsak
+     and trunc(up_behandlingsperiode.FOM) = trunc(pre_final.FOM_DATO)
+     and trunc(up_behandlingsperiode.TOM) = trunc(pre_final.TOM_DATO)
 )
 
 select
