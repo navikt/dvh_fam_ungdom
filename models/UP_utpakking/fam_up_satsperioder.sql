@@ -17,15 +17,16 @@ pre_final as (
     from up_meta_data
         ,json_table(melding, '$'
             columns (
-                behandling_uuid                  varchar2 path '$.behandlingUuid',
+                behandling_uuid                 varchar2 path '$.behandlingUuid',
                 nested path '$.satsPerioder[*]'
                 columns (
-                    FOM                     varchar2 path '$.fom',
-                    TOM                     varchar2 path '$.tom',
-                    SATS_TYPE               varchar2 path '$.satsType',
-                    ANTALL_BARN             varchar2 path '$.antallBarn',
-                    DAGSATS_BARNETILLEGG    varchar2 path '$.dagsatsBarnetillegg',
-                    GRUNNBELOP_FAKTOR       varchar2 path '$.grunnbeløpFaktor'
+                    FOM                         varchar2 path '$.fom',
+                    TOM                         varchar2 path '$.tom',
+                    SATS_TYPE                   varchar2 path '$.satsType',
+                    ANTALL_BARN                 varchar2 path '$.antallBarn',
+                    DAGSATS_UTEN_BARNETILLEGG   varchar2 path '$.dagsatsUtenBarnetillegg',
+                    DAGSATS_BARNETILLEGG        varchar2 path '$.dagsatsBarnetillegg',
+                    GRUNNBELOP_FAKTOR           varchar2 path '$.grunnbeløpFaktor'
                 )
             )
         ) j
@@ -38,6 +39,7 @@ final as (
         to_date(TOM,'yyyy-mm-dd')           as TOM,
         SATS_TYPE,
         ANTALL_BARN,
+        DAGSATS_UTEN_BARNETILLEGG,
         DAGSATS_BARNETILLEGG,
         GRUNNBELOP_FAKTOR,
         up_fagsak.pk_up_fagsak              as FK_UP_FAGSAK
@@ -53,6 +55,7 @@ select
     ,TOM
     ,SATS_TYPE
     ,ANTALL_BARN
+    ,DAGSATS_UTEN_BARNETILLEGG
     ,DAGSATS_BARNETILLEGG
     ,GRUNNBELOP_FAKTOR
     ,localtimestamp as LASTET_DATO
