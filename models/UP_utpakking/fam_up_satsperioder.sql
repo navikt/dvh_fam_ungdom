@@ -22,9 +22,9 @@ pre_final as (
                 columns (
                     FOM                         varchar2 path '$.fom',
                     TOM                         varchar2 path '$.tom',
-                    SATS_TYPE                   varchar2 path '$.satsType',
-                    ANTALL_BARN                 varchar2 path '$.antallBarn',
+                    SATS_TYPE                   varchar2 path '$.satsType',                    
                     DAGSATS_UTEN_BARNETILLEGG   varchar2 path '$.dagsatsUtenBarnetillegg',
+                    ANTALL_BARN                 varchar2 path '$.antallBarn',
                     DAGSATS_BARNETILLEGG        varchar2 path '$.dagsatsBarnetillegg',
                     GRUNNBELOP_FAKTOR           varchar2 path '$.grunnbeløpFaktor'
                 )
