@@ -18,7 +18,7 @@ pre_final as (
             BEHANDLING_UUID             varchar2 path '$.behandlingUuid',
             FORRIGE_BEHANDLING_UUID     varchar2 path '$.forrigeBehandlingUuid',
             FORSTE_SOKNADSDATO          varchar2 path '$.førsteSøknadsdato',
-            VEDTAKSTIDSPUNKT            varchar2 path '$.vedtakstidspunkt',
+            VEDTAKSTIDSPUNKT            TIMESTAMP(3) WITH TIME ZONE path '$.vedtakstidspunkt',
             UTBETALINGSREFERANSE        varchar2 path '$.utbetalingsreferanse',
             PROGRAMDELTAKELSE_FOM       varchar2 path '$.ungdomsprogramDeltakelsePeriode.programdeltakelseFom',
             PROGRAMDELTAKELSE_TOM       varchar2 path '$.ungdomsprogramDeltakelsePeriode.programdeltakelseTom'
@@ -34,12 +34,14 @@ final as (
         p.BEHANDLING_UUID,
         p.FORRIGE_BEHANDLING_UUID,
         to_date(p.FORSTE_SOKNADSDATO,'yyyy-mm-dd') as FORSTE_SOKNADSDATO,
+        /*
         case
             when length(p.VEDTAKSTIDSPUNKT) = 25 then
                 cast(to_timestamp_tz(p.VEDTAKSTIDSPUNKT, 'yyyy-mm-dd"T"hh24:mi:ss TZH:TZM') at time zone 'Europe/Oslo' as timestamp)
             else
                 cast(to_timestamp_tz(p.VEDTAKSTIDSPUNKT, 'FXYYYY-MM-DD"T"HH24:MI:SS.FXFFTZH:TZM') at time zone 'Europe/Oslo' as timestamp)
-        end as VEDTAKSTIDSPUNKT,
+        end as VEDTAKSTIDSPUNKT, */
+        p.VEDTAKSTIDSPUNKT,
         to_date(p.PROGRAMDELTAKELSE_FOM,'yyyy-mm-dd') as PROGRAMDELTAKELSE_FOM,
         to_date(p.PROGRAMDELTAKELSE_TOM,'yyyy-mm-dd') as PROGRAMDELTAKELSE_TOM,
         p.UTBETALINGSREFERANSE,
