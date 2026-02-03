@@ -1,4 +1,4 @@
-with fagsak_behandlingsperiode as (
+with fagsak_siste as (
   select 
     a.FORSTE_SOKNADSDATO
     ,a.SAKSNUMMER
@@ -16,4 +16,5 @@ with fagsak_behandlingsperiode as (
 )
 
 select * 
-from fagsak_behandlingsperiode
+from fagsak_siste
+where rn = 1

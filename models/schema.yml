@@ -45,6 +45,7 @@ sources:
     tables:
      - name: dim_alder
      - name: dim_tid
+     - name: dim_geografi
 
   - name: fam_ungdom
     schema: dvh_fam_ungdom

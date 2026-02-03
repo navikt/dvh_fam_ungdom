@@ -1,0 +1,38 @@
+{{ 
+  config(materialized='view') 
+}}
+
+with siste_dim_tid_mnd as (
+  select
+    SISTE.SAKSNUMMER 
+    ,SISTE.PROGRAMDELTAKELSE_FOM
+    ,SISTE.PROGRAMDELTAKELSE_TOM
+    ,SISTE.PROGRAMDELTAKELSE_TOM_NY 
+    ,SISTE.FK_UP_FAGSAK 
+    ,SISTE.BEHANDLINGSPERIODER_TOM_MAX
+    ,SISTE.STAT_AARMND 
+    ,SISTE.STAT_AARMND_DT
+    ,SISTE.ANTALL_DAGER
+    ,SISTE.UTBET_FOM
+    ,SISTE.UTBET_TOM 
+    ,SISTE.DATO
+
+    ,DIM_TID_MND.SISTE_DATO_I_PERIODEN
+    --,FLOOR(MONTHS_BETWEEN(DIM_TID_MND.SISTE_DATO_I_PERIODEN, PERSON.fodt_dato) / 12.0) Alder -- Siden denne trenger Person, henter jeg alder når vi kommer til Person. TODO HUSK NÅR DU SKRIVER PERSON!!!
+
+    from {{ ref ('int_up_join_dim_tid_dag') }} SISTE
+    join {{ ref ('stg_up_dim_tid_dag') }} DIM_TID_MND
+    ON SISTE.STAT_AARMND=DIM_TID_MND.AAR_MAANED -- Må bruke aliasen på siste? 
+    AND DIM_TID_MND.DIM_NIVAA=3 
+    AND DIM_TID_MND.GYLDIG_FLAGG=1 
+)
+
+select *
+from siste_dim_tid_mnd
+
+/*
+    JOIN  DT_KODEVERK.DIM_TID DIM_TID_MND ON
+    DIM_TID_DAG.AAR_MAANED=DIM_TID_MND.AAR_MAANED AND
+    DIM_TID_MND.DIM_NIVAA=3 AND
+    DIM_TID_MND.GYLDIG_FLAGG=1 
+*/
