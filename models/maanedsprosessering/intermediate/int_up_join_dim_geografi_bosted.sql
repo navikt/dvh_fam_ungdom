@@ -1,7 +1,3 @@
-{{ 
-  config(materialized='view') 
-}}
-
 with siste_dim_geografi_bosted as (
   select
     SISTE.SAKSNUMMER 
@@ -35,6 +31,8 @@ with siste_dim_geografi_bosted as (
     ,SISTE.BOSTED_KOMMUNE_NR
     ,SISTE.BOSTED_LAND
     ,SISTE.Alder
+    ,SISTE.YTELSE_TYPE
+    ,SISTE.SATS_TYPE
 
     ,DIM_GEOGRAFI_BOSTED.FYLKE_NR
     ,DIM_GEOGRAFI_BOSTED.FYLKE_NAVN

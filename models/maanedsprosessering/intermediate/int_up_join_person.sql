@@ -1,7 +1,3 @@
-{{ 
-  config(materialized='view') 
-}}
-
 with siste_person as (
   select
     SISTE.SAKSNUMMER 
@@ -30,6 +26,8 @@ with siste_person as (
     ,SISTE.REDUKSJON
     ,SISTE.BELOP
     ,SISTE.DAGSATS
+    ,SISTE.SATS_TYPE
+    ,SISTE.YTELSE_TYPE
   
     ,PERSON.PK_DIM_PERSON FK_DIM_PERSON_MOTTAKER
     ,PERSON.FK_DIM_GEOGRAFI_BOSTED

@@ -1,7 +1,3 @@
-{{ 
-  config(materialized='view') 
-}}
-
 with siste_behandlingsperioder as (
   select
     SISTE.SAKSNUMMER 
@@ -17,10 +13,11 @@ with siste_behandlingsperioder as (
     ,SISTE.UTBET_TOM
     ,SISTE.DATO
     ,SISTE.SISTE_DATO_I_PERIODEN
+    ,SISTE.YTELSE_TYPE
 
     ,BEHANDLINGSPERIODER.UTFALL
     
-    from      {{ ref ('int_up_join_dim_tid_mnd') }} SISTE
+    from  {{ ref ('int_up_join_dim_tid') }} SISTE
     left join {{ source ('fam_ungdom', 'fam_up_behandlingsperioder') }} BEHANDLINGSPERIODER
     ON SISTE.FK_UP_FAGSAK = BEHANDLINGSPERIODER.FK_UP_FAGSAK -- Byttet fra PK til FK?
     AND BEHANDLINGSPERIODER.FOM>=SISTE.PROGRAMDELTAKELSE_FOM 
@@ -31,11 +28,3 @@ with siste_behandlingsperioder as (
 select *
 from siste_behandlingsperioder
 
-/*
-    LEFT OUTER JOIN FAM_UP_BEHANDLINGSPERIODER BEHANDLINGSPERIODER ON
-    SISTE.PK_UP_FAGSAK = BEHANDLINGSPERIODER.FK_UP_FAGSAK AND
-    BEHANDLINGSPERIODER.FOM>=PROGRAMDELTAKELSE_FOM 
-    --SATSPERIODER.TOM<=PROGRAMDELTAKELSE_TOM_NY
-    AND BEHANDLINGSPERIODER.FOM<=DIM_TID_DAG.DATO 
-    AND (BEHANDLINGSPERIODER.TOM>=DIM_TID_DAG.DATO )
-*/

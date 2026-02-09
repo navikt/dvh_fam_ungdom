@@ -1,7 +1,3 @@
-{{ 
-  config(materialized='view') 
-}}
-
 with siste_dim_tid_mnd as (
   select
     SISTE.SAKSNUMMER 

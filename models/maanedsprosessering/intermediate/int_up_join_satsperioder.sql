@@ -1,7 +1,3 @@
-{{ 
-  config(materialized='view') 
-}}
-
 with siste_satsperioder as (
   select
     SISTE.SAKSNUMMER 
@@ -18,12 +14,15 @@ with siste_satsperioder as (
     ,SISTE.DATO
     ,SISTE.SISTE_DATO_I_PERIODEN
     ,SISTE.UTFALL
+    ,SISTE.YTELSE_TYPE
 
     ,SATSPERIODER.ANTALL_BARN
     ,SATSPERIODER.FOM SATSPERIODE_FOM -- Husk alias videre!
     ,SATSPERIODER.TOM SATSPERIODE_TOM
     ,SATSPERIODER.dagsats_barnetillegg
     ,SATSPERIODER.DAGSATS_UTEN_BARNETILLEGG
+    ,SATSPERIODER.SATS_TYPE
+
     
     from      {{ ref ('int_up_join_behandlingsperioder') }} SISTE
     left join {{ source ('fam_ungdom', 'fam_up_satsperioder') }} SATSPERIODER

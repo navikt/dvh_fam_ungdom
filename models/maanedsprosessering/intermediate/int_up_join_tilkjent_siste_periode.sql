@@ -1,7 +1,3 @@
-{{ 
-  config(materialized='view') 
-}}
-
 with siste_tilkjent_siste_periode as (
   select
     SISTE.SAKSNUMMER 
@@ -28,6 +24,8 @@ with siste_tilkjent_siste_periode as (
     ,SISTE.DAGSATS_TEMP
     ,SISTE.BUDSJETT
     ,SISTE.REDUKSJON
+    ,SISTE.SATS_TYPE
+    ,SISTE.YTELSE_TYPE
 
     ,SUM(NVL(SISTE.DAGSATS_TEMP,TILKJENT_SISTE_PERIODE.DAGSATS)) BELOP -- TILKJENT.DAGSATS = SISTE.DAGSATS_TEMP
     ,NVL(SISTE.DAGSATS_TEMP,TILKJENT_SISTE_PERIODE.DAGSATS) DAGSATS
@@ -61,6 +59,8 @@ with siste_tilkjent_siste_periode as (
         ,SISTE.DAGSATS_TEMP
         ,SISTE.BUDSJETT
         ,SISTE.REDUKSJON
+        ,SISTE.SATS_TYPE
+        ,SISTE.YTELSE_TYPE
         ,NVL(SISTE.DAGSATS_TEMP,TILKJENT_SISTE_PERIODE.DAGSATS)
 )
 

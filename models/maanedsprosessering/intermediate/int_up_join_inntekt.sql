@@ -1,7 +1,3 @@
-{{ 
-  config(materialized='view') 
-}}
-
 with siste_inntekt as (
   select
     SISTE.SAKSNUMMER 
@@ -12,10 +8,10 @@ with siste_inntekt as (
     ,SISTE.BEHANDLINGSPERIODER_TOM_MAX
     ,SISTE.STAT_AARMND 
     ,SISTE.STAT_AARMND_DT
-    ,SISTE.ANTALL_DAGER
-    ,SISTE.UTBET_FOM
-    ,SISTE.UTBET_TOM
-    ,SISTE.DATO
+    ,SUM(SISTE.ANTALL_DAGER) ANTALL_DAGER
+    --,SISTE.UTBET_FOM
+    --,SISTE.UTBET_TOM
+    --,SISTE.DATO
     ,SISTE.SISTE_DATO_I_PERIODEN
     ,SISTE.UTFALL
     ,SISTE.ANTALL_BARN
@@ -25,10 +21,10 @@ with siste_inntekt as (
     ,SISTE.DAGSATS_UTEN_BARNETILLEGG
     ,SISTE.FK_PERSON1_MOTTAKER
     ,SISTE.VEDTAKSTIDSPUNKT
-    ,SISTE.DAGSATS_TEMP
+    --,SISTE.DAGSATS_TEMP
     ,SISTE.BUDSJETT
     ,SISTE.REDUKSJON
-    ,SISTE.BELOP
+    ,SUM(SISTE.BELOP) BELOP
     ,SISTE.DAGSATS
     ,SISTE.FK_DIM_PERSON_MOTTAKER
     ,SISTE.FK_DIM_GEOGRAFI_BOSTED
@@ -37,14 +33,23 @@ with siste_inntekt as (
     ,SISTE.Alder
     ,SISTE.FYLKE_NR
     ,SISTE.FYLKE_NAVN
+    ,SISTE.SATS_TYPE
+    ,SISTE.YTELSE_TYPE
 
     ,MAX(INNTEKT.INNTEKT) INNTEKT
+    ,MIN(SISTE.DATO) UTBET_FOM
+    ,MAX(SISTE.DATO) UTBET_TOM
 
-    from      {{ ref ('int_up_join_dim_geografi_bosted') }} SISTE
+    ,DIM_ALDER.PK_DIM_ALDER FK_DIM_ALDER
+
+    from  {{ ref ('int_up_join_dim_geografi_bosted') }} SISTE
     left join {{ source ('fam_ungdom', 'fam_up_inntektperioder') }} INNTEKT
     ON SISTE.FK_UP_FAGSAK = INNTEKT.FK_UP_FAGSAK -- Byttet fra PK til FK?
     AND INNTEKT.FOM<=SISTE.DATO 
     AND INNTEKT.TOM>=SISTE.DATO    
+    
+    left Join {{ source ('kode_verk', 'dim_alder') }} dim_alder
+    ON siste.alder = dim_alder.alder
 
     GROUP BY
         SISTE.SAKSNUMMER 
@@ -56,9 +61,9 @@ with siste_inntekt as (
         ,SISTE.STAT_AARMND 
         ,SISTE.STAT_AARMND_DT
         ,SISTE.ANTALL_DAGER
-        ,SISTE.UTBET_FOM
-        ,SISTE.UTBET_TOM
-        ,SISTE.DATO
+        --,SISTE.UTBET_FOM
+        --,SISTE.UTBET_TOM
+        --,SISTE.DATO
         ,SISTE.SISTE_DATO_I_PERIODEN
         ,SISTE.UTFALL
         ,SISTE.ANTALL_BARN
@@ -68,10 +73,10 @@ with siste_inntekt as (
         ,SISTE.DAGSATS_UTEN_BARNETILLEGG
         ,SISTE.FK_PERSON1_MOTTAKER
         ,SISTE.VEDTAKSTIDSPUNKT
-        ,SISTE.DAGSATS_TEMP
+        --,SISTE.DAGSATS_TEMP
         ,SISTE.BUDSJETT
         ,SISTE.REDUKSJON
-        ,SISTE.BELOP
+        --,SISTE.BELOP
         ,SISTE.DAGSATS
         ,SISTE.FK_DIM_PERSON_MOTTAKER
         ,SISTE.FK_DIM_GEOGRAFI_BOSTED
@@ -79,15 +84,11 @@ with siste_inntekt as (
         ,SISTE.BOSTED_LAND
         ,SISTE.Alder
         ,SISTE.FYLKE_NR
+        ,SISTE.YTELSE_TYPE
         ,SISTE.FYLKE_NAVN
+        ,SISTE.SATS_TYPE
+        ,DIM_ALDER.PK_DIM_ALDER 
 )
 
 select *
 from siste_inntekt
-
-/*
-    LEFT OUTER JOIN DVH_FAM_UNGDOM.FAM_UP_INNTEKTPERIODER INNTEKT ON
-    SISTE.PK_UP_FAGSAK = INNTEKT.FK_UP_FAGSAK AND
-    INNTEKT.FOM<=DIM_TID_DAG.DATO 
-    AND INNTEKT.TOM>=DIM_TID_DAG.DATO    
-*/

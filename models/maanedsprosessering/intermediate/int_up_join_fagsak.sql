@@ -1,7 +1,3 @@
-{{ 
-  config(materialized='view') 
-}}
-
 with siste_fagsak as (
   select
     SISTE.SAKSNUMMER 
@@ -23,6 +19,8 @@ with siste_fagsak as (
     ,SISTE.SATSPERIODE_TOM
     ,SISTE.dagsats_barnetillegg
     ,SISTE.DAGSATS_UTEN_BARNETILLEGG
+    ,SISTE.SATS_TYPE
+    ,SISTE.YTELSE_TYPE
 
     ,FAGSAK.FK_PERSON1 FK_PERSON1_MOTTAKER -- Husk alias videre!
     ,MAX(FAGSAK.VEDTAKSTIDSPUNKT) VEDTAKSTIDSPUNKT
@@ -51,6 +49,8 @@ with siste_fagsak as (
       ,SISTE.SATSPERIODE_TOM
       ,SISTE.dagsats_barnetillegg
       ,SISTE.DAGSATS_UTEN_BARNETILLEGG
+      ,SISTE.SATS_TYPE
+      ,SISTE.YTELSE_TYPE
       ,FAGSAK.FK_PERSON1
 )
 
