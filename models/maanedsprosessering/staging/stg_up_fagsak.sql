@@ -17,4 +17,4 @@ with fagsak as (
 select * 
 from fagsak
 --where vedtakstidspunkt<to_date('20260201','YYYYMMDD') 
-where vedtakstidspunkt < to_date('{{ var ("max_dato") }}','YYYYMMDD') -- YYYYMMDD
+where vedtakstidspunkt < to_date('{{ var ("max_vedtaksdato") }}','YYYYMMDD') -- YYYYMMDD
