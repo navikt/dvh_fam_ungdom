@@ -51,6 +51,7 @@ with fact as (
         ,SISTE.FK_DIM_ALDER
         ,{{ var("gyldig_flagg") }} GYLDIG_FLAGG
         ,TO_DATE('{{ var ("max_vedtaksdato") }}', 'yyyymmdd') MAX_VEDTAKSDATO
+        ,{{ var("periode_type") }} PERIODE_TYPE
         ,localtimestamp AS lastet_dato
     from {{ ref('int_up_join_inntekt') }} SISTE
 )
@@ -98,5 +99,6 @@ select
     ,SATS_TYPE
     ,GYLDIG_FLAGG
     ,max_vedtaksdato
+    ,PERIODE_TYPE
     ,lastet_dato
 from fact
