@@ -50,8 +50,8 @@ with fact as (
         ,SISTE.SATS_TYPE
         ,SISTE.FK_DIM_ALDER
         ,{{ var("gyldig_flagg") }} GYLDIG_FLAGG
-        ,TO_DATE('{{ var ("max_vedtaksdato") }}', 'yyyymmdd') MAX_VEDTAKSDATO
-        ,{{ var("periode_type") }} PERIODE_TYPE
+        ,TO_DATE('{{ var("max_vedtaksdato") }}', 'yyyymmdd') MAX_VEDTAKSDATO
+        ,'{{ var("periode_type") }}' PERIODE_TYPE
         ,localtimestamp AS lastet_dato
     from {{ ref('int_up_join_inntekt') }} SISTE
 )
