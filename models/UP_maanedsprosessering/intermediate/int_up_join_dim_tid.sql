@@ -28,7 +28,7 @@ with siste_dim_tid_dag as (
     AND DIM_TID_MND.DIM_NIVAA=3 
     AND DIM_TID_MND.GYLDIG_FLAGG=1 
 
-    WHERE DIM_TID_DAG.AAR_MAANED BETWEEN {{ var ( "periode_fra", "to_char(add_months(sysdate,-5),'YYYYMM')" )}} AND  {{  var ( "periode_til" , "to_char(add_months(sysdate,14),'YYYYMM')" )}}
+    WHERE DIM_TID_DAG.AAR_MAANED BETWEEN {{ var ( "periode_fra", "to_char(add_months(sysdate,-5),'YYYYMM')" )}} AND  {{  var ( "periode_til" , "to_char(add_months(sysdate,14),'YYYYMM')" )}} --TODO fjern
 
  group by
     SISTE.SAKSNUMMER 
