@@ -64,3 +64,8 @@ sources:
         description: ''
       - name: fam_up_inntektperioder
         description: ''
+
+  - name: dvh_sbs
+    schema: dvh_sbs
+    tables:
+     - name: SAK_YTELSE_DIM_MV
