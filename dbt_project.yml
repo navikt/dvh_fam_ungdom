@@ -9,8 +9,8 @@ version: '1.0.0'
 profile: 'dvh_fam_ungdom'
 
 vars:
-  gyldig_flagg: 1         
-  max_vedtaksdato: 20260228
+  gyldig_flagg: 4         
+  max_vedtaksdato: 20260424
   periode_type: D
   periode_fra: 202511
   periode_til: 202705

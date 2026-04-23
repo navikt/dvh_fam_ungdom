@@ -27,10 +27,15 @@ with siste_fagsak as (
     ,FAGSAK.FK_PERSON1 FK_PERSON1_MOTTAKER -- Husk alias videre!
     ,MAX(FAGSAK.VEDTAKSTIDSPUNKT) VEDTAKSTIDSPUNKT
     ,FAGSAK.FORSTE_SOKNADSDATO 
+
+    ,FAGSAK_FORSTE.VEDTAKSTIDSPUNKT FORSTE_VEDTAKSTIDSPUNKT
     
     from {{ ref ('int_up_join_satsperioder') }} SISTE
     join {{ source ('fam_ungdom', 'fam_up_fagsak') }} FAGSAK
     ON FAGSAK.PK_UP_FAGSAK=SISTE.FK_UP_FAGSAK -- Byttet fra PK til FK?
+
+    left join {{ ref('stg_up_fagsak_forste') }} FAGSAK_FORSTE
+    ON FAGSAK_FORSTE.SAKSNUMMER = SISTE.SAKSNUMMER
 
     GROUP BY
       SISTE.SAKSNUMMER 
@@ -58,6 +63,7 @@ with siste_fagsak as (
       ,SISTE.SATS_TYPE
       ,FAGSAK.FK_PERSON1
       ,FAGSAK.FORSTE_SOKNADSDATO 
+      ,FAGSAK_FORSTE.VEDTAKSTIDSPUNKT
 )
 
 select *
