@@ -12,9 +12,9 @@ with fagsak as (
     end programdeltakelse_TOM_NY 
     ,row_number() over (partiTIon by SAKSNUMMER order by VEDTAKSTIDSPUNKT DESC) rn
     from {{ source ('fam_ungdom', 'fam_up_fagsak') }}
+    where vedtakstidspunkt < to_date('{{ var ("max_vedtaksdato") }}','YYYYMMDD') -- YYYYMMDD
 )
 
 select * 
 from fagsak
 --where vedtakstidspunkt<to_date('20260201','YYYYMMDD') 
-where vedtakstidspunkt < to_date('{{ var ("max_vedtaksdato") }}','YYYYMMDD') -- YYYYMMDD
