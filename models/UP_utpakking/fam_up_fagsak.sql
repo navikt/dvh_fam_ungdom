@@ -18,7 +18,7 @@ pre_final as (
             BEHANDLING_UUID             varchar2 path '$.behandlingUuid',
             FORRIGE_BEHANDLING_UUID     varchar2 path '$.forrigeBehandlingUuid',
             FORSTE_SOKNADSDATO          varchar2 path '$.førsteSøknadsdato',
-            VEDTAKSTIDSPUNKT            TIMESTAMP(3) WITH TIME ZONE path '$.vedtakstidspunkt',
+            VEDTAKSTIDSPUNKT            TIMESTAMP(3) path '$.vedtakstidspunkt',
             UTBETALINGSREFERANSE        varchar2 path '$.utbetalingsreferanse',
             PROGRAMDELTAKELSE_FOM       varchar2 path '$.ungdomsprogramDeltakelsePeriode.programdeltakelseFom',
             PROGRAMDELTAKELSE_TOM       varchar2 path '$.ungdomsprogramDeltakelsePeriode.programdeltakelseTom'
