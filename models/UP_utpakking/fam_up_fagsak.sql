@@ -70,5 +70,6 @@ select
     PROGRAMDELTAKELSE_FOM,
     PROGRAMDELTAKELSE_TOM,
     KAFKA_OFFSET,
-    localtimestamp as LASTET_DATO
+    localtimestamp as LASTET_DATO,
+    localtimestamp as OPPDATERT_TID
 from final
