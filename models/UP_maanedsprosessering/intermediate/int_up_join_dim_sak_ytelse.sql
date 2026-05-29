@@ -53,6 +53,7 @@ with siste_dim_sak_ytelse as (
          between SAK_YTELSE.GYLDIG_FRA_DATO
              and SAK_YTELSE.GYLDIG_TIL_DATO
      and SAK_YTELSE.SAK_YTELSE_KODE = 'UNG_UNG'
+     and SAK_YTELSE.KILDESYSTEM = 'UNG_SAK'
      and SAK_YTELSE.GYLDIG_FLAGG = 1
 )
 
